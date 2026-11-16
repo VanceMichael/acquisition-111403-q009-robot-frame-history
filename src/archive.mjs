@@ -4,6 +4,8 @@ import {join} from 'node:path';
 
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 
+export const receiptId = (url,status,hash) => digest(Buffer.from(url + ':' + status + ':' + hash));
+
 async function replace(path, bytes) {
   const temporary = path + '.' + randomUUID() + '.tmp';
   const handle = await open(temporary, 'wx', 0o600);
@@ -39,9 +41,9 @@ export async function openArchive(directory) {
         for (const exchange of exchanges) {
           const hash = digest(exchange.bytes);
           await replace(join(directory, 'objects', hash), exchange.bytes);
-          const receiptId = digest(Buffer.from(exchange.url + ':' + exchange.status + ':' + hash));
-          if (!next.exchanges.some(existing => existing.receiptId === receiptId)) {
-            next.exchanges.push({receiptId,url:exchange.url,status:exchange.status,contentType:exchange.contentType,hash});
+          const rid = receiptId(exchange.url, exchange.status, hash);
+          if (!next.exchanges.some(existing => existing.receiptId === rid)) {
+            next.exchanges.push({receiptId:rid,url:exchange.url,status:exchange.status,contentType:exchange.contentType,hash});
           }
         }
         for (const record of records) {

@@ -189,6 +189,104 @@ export const phases={
       "query": {},
       "headers": {}
     }
+  ],
+  "backfill": [
+    {
+      "path": "/observations",
+      "body": {
+        "items": [
+          {
+            "id": "o2",
+            "run": "run1",
+            "clock": "c1",
+            "epoch": 2,
+            "frame": "tool",
+            "time": 10,
+            "position": [
+              1,
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "status": 200,
+      "query": {},
+      "headers": {}
+    },
+    {
+      "path": "/transforms",
+      "body": {
+        "items": [
+          {
+            "parent": "base",
+            "child": "tool",
+            "publisher": "arm",
+            "clock": "c1",
+            "epoch": 1,
+            "time": 9,
+            "static": false,
+            "translation": [
+              0,
+              0,
+              1
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "run": "run1"
+          },
+          {
+            "parent": "base",
+            "child": "tool",
+            "publisher": "arm",
+            "clock": "c1",
+            "epoch": 2,
+            "time": 9,
+            "static": false,
+            "translation": [
+              0,
+              0,
+              1
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "run": "run1"
+          },
+          {
+            "parent": "world",
+            "child": "base",
+            "publisher": "cal",
+            "static": true,
+            "calibration": "cal1",
+            "translation": [
+              2,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "run": "run1"
+          }
+        ]
+      },
+      "method": "GET",
+      "status": 200,
+      "query": {},
+      "headers": {}
+    }
   ]
 };
 export const portalKind="";

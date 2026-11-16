@@ -16,14 +16,14 @@ async function environment(run){
 }
 
 test('现有单份资料收件保留业务标识',()=>environment(async({get})=>{
- const records=await collect(get);assert.ok(records.length>0);assert.ok(records.every(record=>typeof record.id==='string'&&record.id.length));
+ const result=await collect(get);assert.ok(result.records.length>0);assert.ok(result.records.every(record=>typeof record.id==='string'&&record.id.length));
 }));
 test('相同收件重放不会重复建立资料版本',()=>environment(async({directory,get})=>{
- const archive=await openArchive(directory);const records=await collect(get);await archive.commit(records,get.exchanges);await archive.commit(records,get.exchanges);
+ const archive=await openArchive(directory);const {records}=await collect(get);await archive.commit(records,get.exchanges);await archive.commit(records,get.exchanges);
  assert.equal(archive.records().length,records.length);
 }));
 test('重开归档能读到结构化资料',()=>environment(async({directory,get})=>{
- const archive=await openArchive(directory);await archive.commit(await collect(get),get.exchanges);const reopened=await openArchive(directory);assert.deepEqual(reopened.records(),archive.records());
+ const archive=await openArchive(directory);const {records}=await collect(get);await archive.commit(records,get.exchanges);const reopened=await openArchive(directory);assert.deepEqual(reopened.records(),archive.records());
 }));
 test('原文被破坏时拒绝当成有效归档',()=>environment(async({directory})=>{
  const archive=await openArchive(directory);await archive.commit([{id:'sample'}],[{url:'http://local/current',status:200,contentType:'text/plain',bytes:Buffer.from('原文')}]);
